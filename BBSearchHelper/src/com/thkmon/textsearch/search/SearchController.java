@@ -69,7 +69,7 @@ public class SearchController {
 				}
 			}
 			
-			logger.debug("총 " + fileCount + " 개 중 " + printCount + " 개 검색됨");
+			logger.debug("총 " + fileCount + " 개 중 " + printCount + " 개 파일 검색됨");
 			logger.debug("끝");
 			
 		} catch (Exception e) {
