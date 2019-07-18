@@ -9,8 +9,6 @@ import com.thkmon.textsearch.util.StringUtil;
 
 public class SearchController {
 	
-	private FileLogManager logger = new FileLogManager("log");
-	
 	public void search(File parentDir, boolean bGetSubFolders, String extensions, String strToSearch, boolean bIgnoreCase) {
 		if (parentDir == null) {
 			return;
@@ -20,54 +18,66 @@ public class SearchController {
 			return;
 		}
 		
-		logger.debug("시작");
-		logger.debug("대상 폴더 : " + parentDir.getAbsolutePath());
-		logger.debug("하위 폴더 검색여부 : " + (bGetSubFolders ? "YES" : "NO"));
+		FileLogManager logger = null;
 		
-		StringList extensionList = null;
-		if (extensions != null && extensions.trim().length() > 0 && !extensions.equals("*")) {
-			extensionList = StringUtil.splitWithTrim(extensions, ",");
-		}
-		
-		logger.debug("대상 확장자 : " + (extensionList == null ? "*" : extensionList));
-		
-		StringList pathList = new StringList();
-		addChildrenPaths(pathList, parentDir, bGetSubFolders, extensionList);
-		
-		if (pathList == null || pathList.size() == 0) {
-			logger.debug("대상 파일 없음");
-			return;
-		}
-		
-		int fileCount = pathList.size();
-		logger.debug("대상 파일 개수 : " + fileCount);
-		// logger.debug("대상 파일 패스 : " + pathList);
-		
-		int printCount = 0;
-		int percent = 0;
-		System.out.println("진행율 : 0%");
-		
-		int lineNumber = 0;
-		String onePath = "";
-		for (int i=0; i<fileCount; i++) {
-			onePath = pathList.get(i);
+		try {
+			logger = new FileLogManager("log");
 			
-			float pp = (float) (i+1) / fileCount * 100;
-			if (Math.round(pp) > percent) {
-				percent = Math.round(pp);
-				System.out.println("진행율 : " + percent + "%");
+			logger.debug("시작");
+			logger.debug("대상 폴더 : " + parentDir.getAbsolutePath());
+			logger.debug("하위 폴더 검색여부 : " + (bGetSubFolders ? "YES" : "NO"));
+			
+			StringList extensionList = null;
+			if (extensions != null && extensions.trim().length() > 0 && !extensions.equals("*")) {
+				extensionList = StringUtil.splitWithTrim(extensions, ",");
 			}
 			
-			lineNumber = FileUtil.findLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
-			if (lineNumber > -1) {
-				printCount++;
-				// logger.debug(onePath + " => 라인 " + lineNumber);
-				logger.debug(onePath);
+			logger.debug("대상 확장자 : " + (extensionList == null ? "*" : extensionList));
+			
+			StringList pathList = new StringList();
+			addChildrenPaths(pathList, parentDir, bGetSubFolders, extensionList);
+			
+			if (pathList == null || pathList.size() == 0) {
+				logger.debug("대상 파일 없음");
+				return;
 			}
+			
+			int fileCount = pathList.size();
+			logger.debug("대상 파일 개수 : " + fileCount);
+			// logger.debug("대상 파일 패스 : " + pathList);
+			
+			int printCount = 0;
+			int percent = 0;
+			System.out.println("진행율 : 0%");
+			
+			int lineNumber = 0;
+			String onePath = "";
+			for (int i=0; i<fileCount; i++) {
+				onePath = pathList.get(i);
+				
+				float pp = (float) (i+1) / fileCount * 100;
+				if (Math.round(pp) > percent) {
+					percent = Math.round(pp);
+					System.out.println("진행율 : " + percent + "%");
+				}
+				
+				lineNumber = FileUtil.findLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
+				if (lineNumber > -1) {
+					printCount++;
+					// logger.debug(onePath + " => 라인 " + lineNumber);
+					logger.debug(onePath);
+				}
+			}
+			
+			logger.debug("총 " + fileCount + " 개 중 " + printCount + " 개 검색됨");
+			logger.debug("끝");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			logger.closeLogFile();
 		}
-		
-		logger.debug("총 " + fileCount + " 개 중 " + printCount + " 개 출력");
-		logger.debug("끝");
 	}
 	
 	public void addChildrenPaths(StringList listToAdd, File parentDir, boolean bGetSubFolders, StringList extensionList) {

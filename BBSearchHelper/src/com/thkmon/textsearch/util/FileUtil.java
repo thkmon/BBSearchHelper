@@ -105,44 +105,6 @@ public class FileUtil {
 	}
 	
 	
-	public static boolean writeFile(String filePath, String oneLine, boolean bAppend) {
-		if (filePath == null || filePath.length() == 0) {
-			return false;
-		}
-
-		File file = new File(filePath);
-
-		boolean bWrite = false;
-
-		FileOutputStream fileOutputStream = null;
-		OutputStreamWriter outputStreamWriter = null;
-		BufferedWriter bufferedWriter = null;
-
-		try {
-			fileOutputStream = new FileOutputStream(file, bAppend);
-			outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
-			bufferedWriter = new BufferedWriter(outputStreamWriter);
-
-			bufferedWriter.write(oneLine, 0, oneLine.length());
-			bufferedWriter.newLine();
-
-			bWrite = true;
-
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-
-		} finally {
-			flushAndClose(bufferedWriter);
-			flushAndClose(outputStreamWriter);
-			flushAndClose(fileOutputStream);
-		}
-
-		return bWrite;
-	}
-
 	private static void flushAndClose(BufferedWriter bufferedWriter) {
 		try {
 			if (bufferedWriter != null) {
@@ -279,20 +241,21 @@ public class FileUtil {
 			}
 			
 			int lineCount = 0;
-			int index = 0;
+			int foundIndex = 0;
 			
 			String oneLine = null;
 			while ((oneLine = bufferedReader.readLine()) != null) {
 				lineCount++;
 				
 				if (bIgnoreCase) {
-					index = oneLine.toLowerCase().indexOf(strToFind);
+					foundIndex = oneLine.toLowerCase().indexOf(strToFind);
 				} else {
-					index = oneLine.indexOf(strToFind);
+					foundIndex = oneLine.indexOf(strToFind);
 				}
 				
-				if (index > -1) {
+				if (foundIndex > -1) {
 					lineNumber = lineCount;
+					break;
 				}
 			}
 
