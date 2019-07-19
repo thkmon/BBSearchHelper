@@ -152,9 +152,10 @@ public class SearchForm extends JFrame {
 				
 				boolean bIgnoreCase = checkBox2.isSelected();
 				String strToSearch = textField3.getText();
-				if (strToSearch == null || strToSearch.length() == 0) {
-					System.out.println("검색어를 입력해주세요");
-					return;
+				
+				// 검색어 없이도 파일 목록 출력할 수 있도록 수정.
+				if (strToSearch == null) {
+					strToSearch = "";
 				}
 				
 				SearchController searchCtrl = new SearchController();
