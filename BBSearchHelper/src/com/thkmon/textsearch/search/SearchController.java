@@ -61,7 +61,7 @@ public class SearchController {
 					System.out.println("진행율 : " + percent + "%");
 				}
 				
-				lineNumber = FileUtil.findLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
+				lineNumber = FileUtil.findFirstLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
 				if (lineNumber > -1) {
 					printCount++;
 					// logger.debug(onePath + " => 라인 " + lineNumber);
