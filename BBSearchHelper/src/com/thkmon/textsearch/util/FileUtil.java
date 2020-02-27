@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import com.thkmon.textsearch.data.StringList;
+import com.thkmon.textsearch.form.SearchForm;
 
 public class FileUtil {
 	public static StringList readFile(File file) {
@@ -22,10 +23,15 @@ public class FileUtil {
 		FileInputStream fileInputStream = null;
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
-
+		
+		String charset = SearchForm.defaultCharset;
+		if (charset == null || charset.length() == 0) {
+			charset = "UTF-8";
+		}
+		
 		try {
 			fileInputStream = new FileInputStream(file);
-			inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+			inputStreamReader = new InputStreamReader(fileInputStream, charset);
 			bufferedReader = new BufferedReader(inputStreamReader);
 
 			String oneLine = null;
@@ -65,7 +71,7 @@ public class FileUtil {
 		FileOutputStream fileOutputStream = null;
 		OutputStreamWriter outputStreamWriter = null;
 		BufferedWriter bufferedWriter = null;
-
+		
 		try {
 			fileOutputStream = new FileOutputStream(file, bAppend);
 			outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
@@ -191,24 +197,39 @@ public class FileUtil {
 	}
 	
 	
-	public static int findFirstLineByReadFile(File file, String strToFind, boolean bIgnoreCase) {
+	/**
+	 * 파일을 읽어서 검출된 라인을 가져온다.
+	 * 향후 first 라인만 가져올지 multi 라인을 모두 가져올지 옵셔널하게 설정할 수 있었으면 좋겠다.
+	 * 
+	 * @param file
+	 * @param strToFind
+	 * @param bIgnoreCase
+	 * @return
+	 */
+	public static String findMultiLineByReadFile(File file, String strToFind, boolean bIgnoreCase) {
 		if (file == null || !file.exists()) {
-			return -1;
+			return "";
 		}
 		
 		if (!file.isFile()) {
-			return -1;
+			return "";
 		}
 		
+		StringBuffer lineNumberBuff = new StringBuffer();
 		int lineNumber = -1;
 
 		FileInputStream fileInputStream = null;
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
 
+		String charset = SearchForm.defaultCharset;
+		if (charset == null || charset.length() == 0) {
+			charset = "UTF-8";
+		}
+		
 		try {
 			fileInputStream = new FileInputStream(file);
-			inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+			inputStreamReader = new InputStreamReader(fileInputStream, charset);
 			bufferedReader = new BufferedReader(inputStreamReader);
 
 			if (bIgnoreCase) {
@@ -230,7 +251,11 @@ public class FileUtil {
 				
 				if (foundIndex > -1) {
 					lineNumber = lineCount;
-					break;
+					if (lineNumberBuff.length() > 0) {
+						lineNumberBuff.append(", ");
+					}
+					lineNumberBuff.append(String.valueOf(lineNumber));
+					// break;
 				}
 			}
 
@@ -246,6 +271,6 @@ public class FileUtil {
 			close(fileInputStream);
 		}
 
-		return lineNumber;
+		return lineNumberBuff.toString();
 	}
 }

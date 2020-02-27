@@ -24,12 +24,13 @@ public class FileLogManager {
 		String dateTimeStd = DateUtil.getTodayDateTimeStd();
 		String dateTime = dateTimeStd.replace("/", "").replace(":", "").replace(" ", "");
 		
+		// 2020.02.27 로그쓰지 않게 수정
 		// 로그파일 열기
-		openLogFile(name + "_" + dateTime + ".txt");
+		// openLogFile(name + "_" + dateTime + ".txt");
 		
-		this.debug("----------");
-		this.debug("기록 시간 : " + dateTimeStd);
-		this.debug("----------");
+		// this.debugCore("----------");
+		// this.debugCore("기록 시간 : " + dateTimeStd);
+		// this.debugCore("----------");
 	}
 	
 	
@@ -166,28 +167,37 @@ public class FileLogManager {
 	}
 	
 	
-	public void debug(String str) {
-		writeLogFile(str, true);
+	private void debugCore(String str) {
+		
+		// 2020.02.27 로그쓰지 않게 수정
+		// writeLogFile(str, true);
+		
 		System.out.println(str);
 	}
 	
 	
-	public void debug(Object obj) {
-		
-		if (obj == null) {
-			debug("null");
-			return;
-		}
-		
-		String str = "";
-		
-		try {
-			str = String.valueOf(obj);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		debug(str);
+	public void debug(String str, StringBuffer resultBuff) {
+		debugCore(str);
+		resultBuff.append(str).append("\n");
 	}
+	
+	
+//	public void debug(Object obj) {
+//		
+//		if (obj == null) {
+//			debug("null");
+//			return;
+//		}
+//		
+//		String str = "";
+//		
+//		try {
+//			str = String.valueOf(obj);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		debug(str);
+//	}
 }
