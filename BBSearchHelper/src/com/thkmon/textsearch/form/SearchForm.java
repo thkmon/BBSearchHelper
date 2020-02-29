@@ -7,17 +7,17 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.thkmon.textsearch.common.CommonConst;
-import com.thkmon.textsearch.data.StringList;
 import com.thkmon.textsearch.search.SearchController;
-import com.thkmon.textsearch.util.FileUtil;
 import com.thkmon.textsearch.util.PropertiesUtil;
 import com.thkmon.textsearch.util.StringUtil;
 
@@ -35,6 +35,10 @@ public class SearchForm extends JFrame {
 	public static JTextField textField3 = null;
 	public static JTextField textField4 = null;
 	public static JTextField textField5 = null;
+	
+	public static JRadioButton titleButton = null;
+	public static JRadioButton contentButton = null;
+	public static JRadioButton titleContButton = null;
 	
 	public SearchForm() {
 		
@@ -66,7 +70,7 @@ public class SearchForm extends JFrame {
 		
 		this.setResizable(false);
 		this.setTitle("BBSearchHelper_" + CommonConst.VERSION);
-		this.setBounds(0, 0, 560, 390);
+		this.setBounds(0, 0, 560, 410);
 		this.setLayout(null);
 		
 		int marginTop = 15;
@@ -120,6 +124,26 @@ public class SearchForm extends JFrame {
 		});
 		
 		marginTop += 25;
+		
+		titleButton = new JRadioButton("Title Search");
+		titleButton.setBounds(20, marginTop, 100, textFieldHeight);
+		titleButton.setSelected(true);
+		this.getContentPane().add(titleButton);
+		
+		contentButton = new JRadioButton("Content Search");
+		contentButton.setBounds(120, marginTop, 120, textFieldHeight);
+		this.getContentPane().add(contentButton);
+		
+		titleContButton = new JRadioButton("Title + Content Search");
+		titleContButton.setBounds(240, marginTop, 200, textFieldHeight);
+		this.getContentPane().add(titleContButton);
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(titleButton);
+		buttonGroup.add(contentButton);
+		buttonGroup.add(titleContButton);
+		
+		marginTop += 20;
 		
 		final JCheckBox checkBox1 = new JCheckBox("Include Subfolders");
 		checkBox1.setBounds(20, marginTop, 500, textFieldHeight);

@@ -33,9 +33,9 @@ public class SearchController {
 			
 			// 제외할 패스를 얻는다.
 			StringList excludingPathList = getExcludingPathList(pathToExclude);
-			logger.debug("검색제외할 경로 : " + excludingPathList.toString(), resultBuff);
 			int excludingPathCount = 0;
 			if (excludingPathList != null && excludingPathList.size() > 0) {
+				logger.debug("검색제외할 경로 : " + excludingPathList.toString(), resultBuff);
 				excludingPathCount = excludingPathList.size();
 			}
 			
@@ -93,13 +93,36 @@ public class SearchController {
 				}
 				
 				if (strToSearch != null && strToSearch.length() > 0) {
-					lineNumber = FileUtil.findMultiLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
-					
-					if (lineNumber != null && lineNumber.length() > 0) {
-						printCount++;
-						logger.debug(onePath + " // line : " + lineNumber, resultBuff);
-						// logger.debug(onePath);
+					// 제목검색 또는 제목 및 내용검색
+					if (SearchForm.titleButton.isSelected() || SearchForm.titleContButton.isSelected()) {
+						if (bIgnoreCase) {
+							if (onePath.toLowerCase().indexOf(strToSearch.toLowerCase()) > -1) {
+								printCount++;
+								logger.debug(onePath, resultBuff);
+								continue;
+							}
+							
+						} else {
+							if (onePath.indexOf(strToSearch) > -1) {
+								printCount++;
+								logger.debug(onePath, resultBuff);
+								continue;
+							}
+						}
 					}
+					
+					// 내용검색 또는 제목 및 내용검색
+					if (SearchForm.contentButton.isSelected() || SearchForm.titleContButton.isSelected()) {
+						lineNumber = FileUtil.findMultiLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
+						
+						if (lineNumber != null && lineNumber.length() > 0) {
+							printCount++;
+							logger.debug(onePath + " // line : " + lineNumber, resultBuff);
+							// logger.debug(onePath);
+							continue;
+						}
+					}
+					
 				} else {
 					printCount++;
 					logger.debug(onePath, resultBuff);
