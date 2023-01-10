@@ -1,5 +1,5 @@
 package com.thkmon.textsearch.common;
 
 public class CommonConst {
-	public static String VERSION = "200301";
+	public static String VERSION = "20200301";
 }
