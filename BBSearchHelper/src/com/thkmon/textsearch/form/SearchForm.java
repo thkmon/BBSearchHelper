@@ -36,9 +36,9 @@ public class SearchForm extends JFrame {
 	public static JTextField textField4 = null;
 	public static JTextField textField5 = null;
 	
-	public static JRadioButton titleButton = null;
+	public static JRadioButton fileNameButton = null;
 	public static JRadioButton contentButton = null;
-	public static JRadioButton titleContButton = null;
+	public static JRadioButton fileNameContButton = null;
 	
 	public SearchForm() {
 		
@@ -125,23 +125,31 @@ public class SearchForm extends JFrame {
 		
 		marginTop += 25;
 		
-		titleButton = new JRadioButton("Title Search");
-		titleButton.setBounds(20, marginTop, 100, textFieldHeight);
-		titleButton.setSelected(true);
-		this.getContentPane().add(titleButton);
+		int elemX = 20;
 		
+		int elemWidth = 140;
+		fileNameButton = new JRadioButton("FileName Search");
+		fileNameButton.setBounds(elemX, marginTop, elemWidth, textFieldHeight);
+		this.getContentPane().add(fileNameButton);
+		elemX = elemX + elemWidth;
+		
+		elemWidth = 140;
 		contentButton = new JRadioButton("Content Search");
-		contentButton.setBounds(120, marginTop, 120, textFieldHeight);
+		contentButton.setBounds(elemX, marginTop, elemWidth, textFieldHeight);
 		this.getContentPane().add(contentButton);
+		elemX = elemX + elemWidth;
 		
-		titleContButton = new JRadioButton("Title + Content Search");
-		titleContButton.setBounds(240, marginTop, 200, textFieldHeight);
-		this.getContentPane().add(titleContButton);
+		elemWidth = 200;
+		fileNameContButton = new JRadioButton("FileName + Content Search");
+		fileNameContButton.setBounds(elemX, marginTop, elemWidth, textFieldHeight);
+		fileNameContButton.setSelected(true);
+		this.getContentPane().add(fileNameContButton);
+		elemX = elemX + elemWidth;
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(titleButton);
+		buttonGroup.add(fileNameButton);
 		buttonGroup.add(contentButton);
-		buttonGroup.add(titleContButton);
+		buttonGroup.add(fileNameContButton);
 		
 		marginTop += 20;
 		

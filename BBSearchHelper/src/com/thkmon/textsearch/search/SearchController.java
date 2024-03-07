@@ -94,7 +94,7 @@ public class SearchController {
 				
 				if (strToSearch != null && strToSearch.length() > 0) {
 					// 제목검색 또는 제목 및 내용검색
-					if (SearchForm.titleButton.isSelected() || SearchForm.titleContButton.isSelected()) {
+					if (SearchForm.fileNameButton.isSelected() || SearchForm.fileNameContButton.isSelected()) {
 						if (bIgnoreCase) {
 							if (onePath.toLowerCase().indexOf(strToSearch.toLowerCase()) > -1) {
 								printCount++;
@@ -112,7 +112,7 @@ public class SearchController {
 					}
 					
 					// 내용검색 또는 제목 및 내용검색
-					if (SearchForm.contentButton.isSelected() || SearchForm.titleContButton.isSelected()) {
+					if (SearchForm.contentButton.isSelected() || SearchForm.fileNameContButton.isSelected()) {
 						lineNumber = FileUtil.findMultiLineByReadFile(new File(onePath), strToSearch, bIgnoreCase);
 						
 						if (lineNumber != null && lineNumber.length() > 0) {
